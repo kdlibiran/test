@@ -12,10 +12,12 @@ export function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     const res = await fetch(`${API_URL}/auth/signup`, {
       method: "POST",
@@ -24,6 +26,8 @@ export function SignupForm() {
       },
       body: JSON.stringify({ name, email, password }),
     });
+
+    setLoading(false);
 
     if (!res.ok) {
       setError("Sign up failed. Please try again with another email.");
@@ -87,9 +91,8 @@ export function SignupForm() {
         type="submit"
         className="mt-1 h-9 rounded-md bg-zinc-900 text-xs font-medium text-zinc-50 hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
       >
-        Create account
+        {loading ? "Signing up..." : "Create account"}
       </button>
     </form>
   );
 }
-
